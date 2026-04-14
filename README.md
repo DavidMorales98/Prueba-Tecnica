@@ -1,4 +1,4 @@
-# Chatbot de Agendamiento Medico - Chatbot de Agendamiento Médico
+# Chatbot de Agendamiento Medico
 
 Aplicación web full-stack para agendamiento médico mediante un chatbot inteligente con OpenAI.
 
@@ -51,7 +51,6 @@ start-frontend.bat
 
 ```bash
 cd backend
-# Crear .env
 cp .env.example .env
 # Editar .env y agregar tu OPENAI_API_KEY
 
@@ -75,19 +74,20 @@ Archivo `backend/.env`:
 
 ```env
 PORT=3001
-OPENAI_API_KEY=sk-proj-...    # Tu API Key de OpenAI
+OPENAI_API_KEY=sk-proj-...
 JWT_SECRET=tu_secreto_aqui
 FRONTEND_URL=http://localhost:5173
 ```
 
 ---
 
-## Credenciales de prueba
+## Acceso al sistema
 
-| Usuario | Contraseña |
-|---------|-----------|
-| admin | admin123 |
-| medico | medico123 |
+El sistema está configurado para un único paciente:
+
+| RUT | Contraseña |
+|-----|-----------|
+| 19881480 | 123456 |
 
 ---
 
@@ -97,49 +97,53 @@ FRONTEND_URL=http://localhost:5173
 Prueba Tecnica/
 ├── backend/
 │   ├── src/
-│   │   ├── controllers/        # Lógica de request/response HTTP
+│   │   ├── controllers/
 │   │   │   ├── authController.js
 │   │   │   └── appointmentsController.js
-│   │   ├── routes/             # Definición de rutas Express
+│   │   ├── routes/
 │   │   │   ├── authRoutes.js
 │   │   │   └── appointmentsRoutes.js
-│   │   ├── services/           # Lógica de negocio
-│   │   │   ├── authService.js      (JWT fake)
-│   │   │   ├── appointmentsService.js  (CRUD + JSON DB)
-│   │   │   └── openaiService.js    (Responses API + Tool Calling)
+│   │   ├── services/
+│   │   │   ├── authService.js           (JWT fake)
+│   │   │   ├── appointmentsService.js   (CRUD + JSON DB)
+│   │   │   └── openaiService.js         (Responses API + Tool Calling)
 │   │   ├── middleware/
-│   │   │   └── authMiddleware.js   (Verificación JWT)
+│   │   │   └── authMiddleware.js        (Verificación JWT)
 │   │   ├── socket/
-│   │   │   └── chatSocket.js       (Socket.io + historial por sesión)
+│   │   │   └── chatSocket.js            (Socket.io + historial por sesión)
 │   │   ├── data/
-│   │   │   └── appointments.json   (Base de datos)
-│   │   └── index.js               (Entry point)
+│   │   │   └── appointments.json        (Base de datos)
+│   │   └── index.js
 │   ├── .env.example
 │   └── package.json
 │
 ├── frontend/
 │   ├── src/
+│   │   ├── layouts/
+│   │   │   └── AppLayout.vue            (Header compartido)
 │   │   ├── components/
-│   │   │   ├── ChatMessage.vue       (Burbuja de mensaje)
-│   │   │   ├── ChatInput.vue         (Input con autoexpand)
-│   │   │   ├── TypingIndicator.vue   (Animación de escritura)
-│   │   │   └── AppointmentsSidebar.vue (Lista de citas)
+│   │   │   ├── ChatMessage.vue
+│   │   │   ├── ChatInput.vue
+│   │   │   ├── TypingIndicator.vue
+│   │   │   └── AppointmentsSidebar.vue
 │   │   ├── views/
 │   │   │   ├── LoginView.vue
 │   │   │   └── ChatView.vue
 │   │   ├── stores/
-│   │   │   ├── authStore.ts    (Pinia - autenticación)
-│   │   │   └── chatStore.ts    (Pinia - mensajes y socket)
+│   │   │   ├── authStore.ts
+│   │   │   ├── chatStore.ts
+│   │   │   └── uiStore.ts
 │   │   ├── services/
-│   │   │   ├── authService.ts  (API login + localStorage)
-│   │   │   └── socketService.ts (Wrapper Socket.io)
-│   │   ├── router/index.ts     (Vue Router + guards)
-│   │   └── types/index.ts      (Interfaces TypeScript)
+│   │   │   ├── authService.ts
+│   │   │   └── socketService.ts
+│   │   ├── router/index.ts
+│   │   └── types/index.ts
 │   └── package.json
 │
-├── start-all.bat       # Inicia todo (recomendado)
+├── start-all.bat
 ├── start-backend.bat
 ├── start-frontend.bat
+├── .gitignore
 └── README.md
 ```
 
@@ -151,29 +155,29 @@ Prueba Tecnica/
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| POST | `/api/auth/login` | Login con usuario/contraseña |
-| GET | `/api/auth/me` | Datos del usuario autenticado |
+| POST | `/api/auth/login` | Login con RUT y contraseña |
+| GET | `/api/auth/me` | Datos del paciente autenticado |
 
 ### Citas médicas (requieren JWT)
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| GET | `/api/appointments` | Listar todas las citas |
+| GET | `/api/appointments` | Listar citas |
 | GET | `/api/appointments/:id` | Obtener cita por ID |
-| POST | `/api/appointments` | Crear nueva cita |
+| POST | `/api/appointments` | Crear cita |
 | PUT | `/api/appointments/:id` | Actualizar cita |
 | DELETE | `/api/appointments/:id` | Eliminar cita |
 
 ### Socket.io (`/chat`)
 
-| Evento (cliente→servidor) | Descripción |
-|--------------------------|-------------|
-| `user_message` | Enviar mensaje al chatbot |
+| Evento (cliente → servidor) | Descripción |
+|-----------------------------|-------------|
+| `user_message` | Enviar mensaje al asistente |
 | `clear_history` | Limpiar historial de conversación |
 
-| Evento (servidor→cliente) | Descripción |
-|--------------------------|-------------|
-| `bot_message` | Respuesta del chatbot |
+| Evento (servidor → cliente) | Descripción |
+|-----------------------------|-------------|
+| `bot_message` | Respuesta del asistente |
 | `bot_typing` | Indicador de escritura |
 | `history_cleared` | Confirmación de limpieza |
 
@@ -182,20 +186,18 @@ Prueba Tecnica/
 ## Flujo del chatbot
 
 ```
-Usuario escribe mensaje
+Paciente escribe mensaje
         ↓
   Socket.io → Backend
         ↓
   OpenAI Responses API
   (con Tool Calling)
         ↓
-  ¿Requiere acción? → Sí → Ejecuta función CRUD
-        ↓                          ↓
-       No              Segunda llamada a OpenAI
-        ↓                          ↓
-  Respuesta de texto ←────────────┘
+  ¿Requiere acción? → Sí → Ejecuta CRUD
+        ↓                        ↓
+       No           Segunda llamada a OpenAI
+        ↓                        ↓
+  Respuesta de texto ←──────────┘
         ↓
   Socket.io → Frontend
-        ↓
-  Muestra mensaje en chat
 ```

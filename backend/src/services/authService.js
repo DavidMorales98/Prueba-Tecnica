@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 
-// Usuario del sistema
+// Usuario del sistema (paciente)
 const FAKE_USERS = [
-  { id: '1', username: 'david.morales', password: 'david123', name: 'David Morales' },
+  { id: '1', username: '19881480', password: '123456', name: 'David Morales' },
 ];
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secreto_default_cambiar';

@@ -13,7 +13,7 @@
 
         <form class="login-form" @submit.prevent="handleLogin">
           <div class="form-group">
-            <label class="form-label" for="username">Usuario</label>
+            <label class="form-label" for="username">RUT</label>
             <div class="input-wrapper">
               <User :size="16" class="input-icon" />
               <input
@@ -21,7 +21,7 @@
                 v-model="form.username"
                 type="text"
                 class="form-input"
-                placeholder="Ingresa tu usuario"
+                placeholder="Ingresa tu RUT sin puntos ni guion"
                 autocomplete="username"
                 :disabled="loading"
                 required
