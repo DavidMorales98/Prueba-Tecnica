@@ -44,9 +44,7 @@ initChatSocket(io);
 const PORT = process.env.PORT || 3001;
 
 server.listen(PORT, () => {
-  console.log(`\n🚀 Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`📡 Socket.io disponible en ws://localhost:${PORT}/chat`);
-  console.log(`\nUsuarios de prueba:`);
-  console.log(`  • admin / admin123`);
-  console.log(`  • medico / medico123\n`);
+  console.log(`\nServidor corriendo en http://localhost:${PORT}`);
+  console.log(`Socket.io disponible en ws://localhost:${PORT}/chat`);
+  console.log(`\nAcceso: RUT 19881480 / contrasena 123456\n`);
 });
